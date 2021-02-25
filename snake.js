@@ -97,7 +97,8 @@ function generateApple() {
 
   snake.forEach(function appleSnakeAte(part) {
     const hasEaten = part.x == apple_x && part.y == apple_y;
-    if (hasEaten) generateApple();
+    const hasEatenBadApple = part.x == badApple_x && part.y == badApple_y;
+    if (hasEaten || hasEatenBadApple) generateApple();
   });
 }
 
