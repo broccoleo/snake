@@ -12,6 +12,7 @@ let badApple_y;
 let dx = 20;
 let dy = 0;
 
+// Game board set up
 const canvas = document.querySelector("canvas");
 const playButton = document.getElementById("press-play");
 const ctx = canvas.getContext("2d");
@@ -28,6 +29,7 @@ playButton.addEventListener("click", function () {
   document.addEventListener("keydown", controlSnake);
 });
 
+// Game loop
 function draw() {
   console.log(badApple_x, badApple_y, snake[0].x, snake[0].y);
 
@@ -40,9 +42,9 @@ function draw() {
   }
 
   newDirection = false;
+
   setTimeout(function onTick() {
     clearBoard();
-
     if (snake.length % 3 == 0) {
       drawApple();
       drawRottenApple();
@@ -50,11 +52,8 @@ function draw() {
       drawApple();
       clearBadApple();
     }
-
-    snake.forEach(drawSnakePart);
-
+    snake.forEach(drawSnakeSegment);
     moveSnake();
-
     draw();
   }, 100);
 }
@@ -74,11 +73,11 @@ function drawRottenApple() {
   ctx.fillRect(badApple_x, badApple_y, 20, 20);
 }
 
-function drawSnakePart(snakePart) {
+function drawSnakeSegment(snakeSegment) {
   ctx.fillStyle = "green";
   ctx.strokestyle = "darkgreen";
-  ctx.fillRect(snakePart.x, snakePart.y, 20, 20);
-  ctx.strokeRect(snakePart.x, snakePart.y, 20, 20);
+  ctx.fillRect(snakeSegment.x, snakeSegment.y, 20, 20);
+  ctx.strokeRect(snakeSegment.x, snakeSegment.y, 20, 20);
 }
 
 function gameOver() {
@@ -112,16 +111,30 @@ function generateApple() {
   apple_x = nextApple(0, canvas.width - 20);
   apple_y = nextApple(0, canvas.height - 20);
 
-  snake.forEach(function appleSnakeAte(part) {
-    const hasEaten = part.x == apple_x && part.y == apple_y;
-    const hasEatenBadApple = part.x == badApple_x && part.y == badApple_y;
-    if (hasEaten || hasEatenBadApple) generateApple();
+  snake.forEach(function checkAppleCollision(segment) {
+    const appleCollision = segment.x == apple_x && segment.y == apple_y;
+    const badAppleCollision =
+      segment.x == badApple_x && segment.y == badApple_y;
+    if (appleCollision || badAppleCollision) generateApple();
   });
 }
 
 function clearBadApple() {
   badApple_x = null;
   badApple_y = null;
+}
+
+function moveSnake() {
+  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  snake.unshift(head);
+  const eatApple = snake[0].x === apple_x && snake[0].y === apple_y;
+  if (eatApple) {
+    score += 1;
+    document.getElementById("score").innerHTML = score;
+    generateApple();
+  } else {
+    snake.pop();
+  }
 }
 
 function controlSnake(e) {
@@ -153,18 +166,5 @@ function controlSnake(e) {
   if (e.keyCode === arrowDown && !goingUp) {
     dx = 0;
     dy = 20;
-  }
-}
-
-function moveSnake() {
-  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-  snake.unshift(head);
-  const eatApple = snake[0].x === apple_x && snake[0].y === apple_y;
-  if (eatApple) {
-    score += 1;
-    document.getElementById("score").innerHTML = score;
-    generateApple();
-  } else {
-    snake.pop();
   }
 }
