@@ -9,6 +9,10 @@ body {
   background-color: black;
 }
 
+canvas {
+  font-family: "Press Start 2P";
+}
+
 .container {
   display: flex;
   flex-direction: column;

@@ -13,10 +13,11 @@ let dx = 20;
 let dy = 0;
 
 const canvas = document.querySelector("canvas");
+const playButton = document.getElementById("press-play");
 const ctx = canvas.getContext("2d");
 
 // Start game
-document.getElementById("press-play").addEventListener("click", function () {
+playButton.addEventListener("click", function () {
   document.querySelector(".snakeboard").style.display = "none";
   canvas.style.border = "1px solid lightblue";
   if (gameOver()) {
@@ -28,10 +29,13 @@ document.getElementById("press-play").addEventListener("click", function () {
 });
 
 function draw() {
+  console.log(badApple_x, badApple_y, snake[0].x, snake[0].y);
+
   if (gameOver()) {
     document.removeEventListener("keydown", controlSnake);
-    ctx.font = "36px gamefont";
-    ctx.fillText("Game Over!", canvas.height / 3, canvas.height / 2);
+    playButton.innerHTML = "clear game";
+    ctx.font = "36px serif";
+    ctx.fillText("game over :(", canvas.height / 3, canvas.height / 2);
     return;
   }
 
@@ -42,7 +46,10 @@ function draw() {
     if (snake.length % 3 == 0) {
       drawApple();
       drawRottenApple();
-    } else drawApple();
+    } else {
+      drawApple();
+      clearBadApple();
+    }
 
     snake.forEach(drawSnakePart);
 
@@ -79,14 +86,18 @@ function gameOver() {
     if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
   }
 
-  const eatBadApple = snake[0].x === badApple_x && snake[0].y === badApple_y;
+  if (crashIntoWall()) return true;
 
+  const eatBadApple = snake[0].x === badApple_x && snake[0].y === badApple_y;
+  if (eatBadApple) return true;
+}
+
+function crashIntoWall() {
   const crashLeft = snake[0].x < 0;
   const crashRight = snake[0].x > canvas.width - 20;
   const crashUp = snake[0].y < 0;
   const crashDown = snake[0].y > canvas.height - 20;
-
-  return crashLeft || crashRight || crashUp || crashDown || eatBadApple;
+  return crashLeft || crashRight || crashUp || crashDown;
 }
 
 function nextApple(min, max) {
@@ -94,9 +105,10 @@ function nextApple(min, max) {
 }
 
 function generateApple() {
-  badApple_x = nextApple(0, canvas.width - 20);
-  badApple_y = nextApple(0, canvas.height - 20);
-
+  if (snake.length % 3 === 0) {
+    badApple_x = nextApple(0, canvas.width - 20);
+    badApple_y = nextApple(0, canvas.height - 20);
+  }
   apple_x = nextApple(0, canvas.width - 20);
   apple_y = nextApple(0, canvas.height - 20);
 
@@ -105,6 +117,11 @@ function generateApple() {
     const hasEatenBadApple = part.x == badApple_x && part.y == badApple_y;
     if (hasEaten || hasEatenBadApple) generateApple();
   });
+}
+
+function clearBadApple() {
+  badApple_x = null;
+  badApple_y = null;
 }
 
 function controlSnake(e) {
