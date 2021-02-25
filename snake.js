@@ -30,7 +30,7 @@ document.getElementById("press-play").addEventListener("click", function () {
 function draw() {
   if (gameOver()) {
     document.removeEventListener("keydown", controlSnake);
-    ctx.font = "36px serif";
+    ctx.font = "36px gamefont";
     ctx.fillText("Game Over!", canvas.height / 3, canvas.height / 2);
     return;
   }

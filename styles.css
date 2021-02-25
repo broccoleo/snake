@@ -1,7 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+@font-face {
+  font-family: "gamefont";
+  src: url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+}
+
 body {
-  background-color: #373737;
+  background-color: black;
 }
 
 .container {
@@ -35,22 +40,20 @@ body {
 }
 
 button {
+  color: lightblue;
   border: none;
   font-family: "Press Start 2P";
-  font-size: 24px;
+  font-size: 26px;
   margin-top: 40px;
   background: none;
-  text-decoration: underline;
-  text-decoration-color: green;
 }
 
 button:hover {
-  color: green;
-  text-decoration: none;
-  font-size: 26px;
+  font-size: 30px;
 }
 
 .score {
+  color: lightblue;
   font-family: "Press Start 2P";
   text-align: center;
   font-size: 16px;
@@ -60,5 +63,5 @@ button:hover {
 }
 
 #score {
-  color: green;
+  color: blue;
 }
