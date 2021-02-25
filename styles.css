@@ -10,8 +10,28 @@ body {
   align-items: center;
   justify-content: center;
 }
-canvas {
+
+.snakeboard {
+  width: 500px;
+  height: 500px;
   background-color: black;
+  font-family: "Press Start 2P";
+  font-size: 18px;
+  color: blue;
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 3px;
+  word-spacing: 2px;
+  line-height: 30px;
+  border: 1px solid lightblue;
+}
+
+.snakeboard > p:hover {
+  color: lightblue;
 }
 
 button {

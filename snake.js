@@ -1,5 +1,5 @@
 // Initialise variables
-let snake = [{ x: 200, y: 200 }];
+let snake = [{ x: 100, y: 100 }];
 let score = 0;
 let newDirection = false;
 
@@ -17,6 +17,11 @@ const ctx = canvas.getContext("2d");
 
 // Start game
 document.getElementById("press-play").addEventListener("click", function () {
+  document.querySelector(".snakeboard").style.display = "none";
+  canvas.style.border = "1px solid lightblue";
+  if (gameOver()) {
+    location.reload();
+  }
   draw();
   generateApple();
   document.addEventListener("keydown", controlSnake);
